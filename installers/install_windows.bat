@@ -1,14 +1,19 @@
 @echo off
-REM SonarLink v1.0 - Windows Installation Script
+REM SonarLink v2.0 - Windows Installation Script
 REM Supports Python 3.8+ with automatic architecture detection
+REM Features: Audio file transfer, private/open chat, encryption, audit logs
 
 echo =======================================
-echo   SonarLink v1.0 - Windows Installer
+echo   SonarLink v2.0 - Windows Installer
 echo =======================================
+echo.
+echo Features: Audio-based file transfer + chat messaging
+echo Encryption: AES-256-GCM, RSA-4096, FSS1 format
+echo Limit: 10 KB files (keys, passwords, credentials)
 echo.
 
 REM Check Python installation
-echo [1/5] Checking Python installation...
+echo [1/6] Checking Python installation...
 python --version >nul 2>&1
 if errorlevel 1 (
     echo [ERROR] Python not found!
@@ -25,7 +30,7 @@ python --version
 echo.
 
 REM Detect Python version and architecture
-echo [2/5] Detecting system configuration...
+echo [2/6] Detecting system configuration...
 for /f "tokens=2" %%i in ('python --version 2^>^&1') do set PYTHON_VERSION=%%i
 for /f "tokens=1,2 delims=." %%a in ("%PYTHON_VERSION%") do (
     set PYTHON_MAJOR=%%a
@@ -42,7 +47,7 @@ echo Architecture: %ARCH%
 echo.
 
 REM Check pip
-echo [3/5] Checking pip...
+echo [3/6] Checking pip...
 python -m pip --version >nul 2>&1
 if errorlevel 1 (
     echo [ERROR] pip not found!
@@ -55,7 +60,7 @@ python -m pip --version
 echo.
 
 REM Install PyAudio based on Python version
-echo [4/5] Installing PyAudio...
+echo [4/6] Installing PyAudio...
 echo.
 
 REM Check if Python 3.13+
@@ -133,21 +138,29 @@ if %PYTHON_MAJOR% GEQ 3 if %PYTHON_MINOR% GEQ 13 (
 echo.
 
 REM Install other dependencies
-echo [5/5] Installing other dependencies...
-pip install ggwave-wheels cryptography numpy
+echo [5/6] Installing other dependencies...
+echo Installing: ggwave-wheels, cryptography, numpy, colorama, qrcode
+echo.
+pip install ggwave-wheels cryptography numpy colorama qrcode
 
 if errorlevel 1 (
     echo.
-    echo [ERROR] Failed to install dependencies
+    echo [WARNING] Some dependencies failed to install
+    echo Trying individual installations...
     echo.
-    echo Try manually:
-    echo   pip install ggwave-wheels
-    echo   pip install cryptography
-    echo   pip install numpy
-    echo.
-    pause
-    exit /b 1
+    pip install ggwave-wheels
+    pip install cryptography
+    pip install numpy
+    pip install colorama
+    pip install qrcode
 )
+
+echo.
+
+REM Install optional: PyInstaller for creating executables
+echo [6/6] Optional: PyInstaller for creating standalone executables
+echo.
+pip install pyinstaller
 
 echo.
 echo =======================================
@@ -159,14 +172,19 @@ python -c "import pyaudio; print('[OK] PyAudio:', pyaudio.__version__)" 2>nul ||
 python -c "import ggwave; print('[OK] ggwave')" 2>nul || echo [FAILED] ggwave
 python -c "import cryptography; print('[OK] cryptography')" 2>nul || echo [FAILED] cryptography
 python -c "import numpy; print('[OK] numpy:', numpy.__version__)" 2>nul || echo [FAILED] numpy
+python -c "import colorama; print('[OK] colorama')" 2>nul || echo [FAILED] colorama
+python -c "import qrcode; print('[OK] qrcode (optional)')" 2>nul || echo [INFO] qrcode (optional) not installed
 
 echo.
 echo =======================================
 echo   Installation Complete!
 echo =======================================
 echo.
-echo To start SonarLink:
-echo   python sonarlink.py
+echo To start SonarLink v2.0:
+echo   python sonarlink2_0.py
+echo.
+echo To create standalone executable:
+echo   pyinstaller --onefile sonarlink2_0.py
 echo.
 echo For help, see README.md
 echo.

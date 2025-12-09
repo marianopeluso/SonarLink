@@ -1,10 +1,15 @@
 #!/bin/bash
-# SonarLink v1.0 - Linux Installation Script
+# SonarLink v2.0 - Linux Installation Script
 # Supports multiple distributions and architectures (x86_64, ARM64, ARM32)
+# Features: Audio file transfer + chat, AES-256-GCM encryption, audit logs
 
 echo "======================================="
-echo "  SonarLink v1.0 - Linux Installer"
+echo "  SonarLink v2.0 - Linux Installer"
 echo "======================================="
+echo ""
+echo "Features: Audio-based file transfer + messaging"
+echo "Encryption: AES-256-GCM, RSA-4096, FSS1 format"
+echo "Limit: 10 KB files (keys, passwords, credentials)"
 echo ""
 
 # Check if running as root
@@ -80,13 +85,16 @@ else
     case $DISTRO in
         ubuntu|debian|linuxmint|raspbian)
             sudo apt-get update
-            sudo apt-get install -y python3 python3-pip
+            sudo apt-get install -y python3 python3-pip python3-dev
             ;;
         arch|manjaro)
             sudo pacman -S --noconfirm python python-pip
             ;;
         fedora|rhel|centos)
-            sudo dnf install -y python3 python3-pip
+            sudo dnf install -y python3 python3-pip python3-devel
+            ;;
+        opensuse*)
+            sudo zypper install -y python3 python3-pip python3-devel
             ;;
         *)
             echo "[ERROR] Please install Python 3 manually"
@@ -109,9 +117,10 @@ case $DISTRO in
             python3-dev \
             build-essential \
             gcc \
-            git
+            git \
+            alsa-utils
         
-        # Try to install python3-pyaudio from system repos
+        # Try to install python3-pyaudio from system repos (cleanest method)
         echo ""
         echo "Attempting to install PyAudio from system repository..."
         sudo apt-get install -y python3-pyaudio 2>/dev/null
@@ -141,7 +150,8 @@ case $DISTRO in
             python3-devel \
             gcc \
             gcc-c++ \
-            git
+            git \
+            alsa-lib-devel
         
         PYAUDIO_INSTALLED=0
         ;;
@@ -152,13 +162,14 @@ case $DISTRO in
             python3-devel \
             gcc \
             gcc-c++ \
-            git
+            git \
+            alsa-devel
         
         PYAUDIO_INSTALLED=0
         ;;
     *)
         echo "[WARNING] Unknown distribution - skipping system packages"
-        echo "You may need to install: portaudio-dev, python3-dev, build-essential"
+        echo "You may need to install: portaudio-dev, python3-dev, build-essential, alsa-utils"
         PYAUDIO_INSTALLED=0
         ;;
 esac
@@ -186,7 +197,7 @@ python3 -m pip install --upgrade pip --user
 
 echo ""
 
-# Install Python packages
+# Install Python packages from requirements.txt
 echo "[6/6] Installing Python packages..."
 echo ""
 
@@ -225,16 +236,38 @@ else
 fi
 
 echo ""
-echo "Installing ggwave-wheels..."
-python3 -m pip install --user ggwave-wheels
+echo "Installing core dependencies..."
+echo ""
+
+# Install from requirements.txt if it exists
+if [ -f "requirements.txt" ]; then
+    echo "Installing from requirements.txt..."
+    python3 -m pip install --user -r requirements.txt
+else
+    # Fallback: install individually
+    echo "requirements.txt not found, installing individually..."
+    
+    echo "Installing ggwave-wheels..."
+    python3 -m pip install --user ggwave-wheels
+    
+    echo "Installing cryptography..."
+    python3 -m pip install --user cryptography
+    
+    echo "Installing numpy..."
+    python3 -m pip install --user numpy
+    
+    echo "Installing colorama..."
+    python3 -m pip install --user colorama
+    
+    echo "Installing qrcode (optional for Lightning donations)..."
+    python3 -m pip install --user qrcode[pil]
+fi
 
 echo ""
-echo "Installing cryptography..."
-python3 -m pip install --user cryptography
 
-echo ""
-echo "Installing numpy..."
-python3 -m pip install --user numpy
+# Optional: PyInstaller for creating standalone executables
+echo "Installing PyInstaller (optional for creating standalone executables)..."
+python3 -m pip install --user pyinstaller
 
 echo ""
 
@@ -258,6 +291,12 @@ python3 -c "import cryptography; print('[OK]')" 2>/dev/null || { echo "[FAILED]"
 echo -n "Checking numpy... "
 python3 -c "import numpy; print('[OK] Version:', numpy.__version__)" 2>/dev/null || { echo "[FAILED]"; FAILED=1; }
 
+echo -n "Checking colorama... "
+python3 -c "import colorama; print('[OK]')" 2>/dev/null || { echo "[FAILED]"; FAILED=1; }
+
+echo -n "Checking qrcode... "
+python3 -c "import qrcode; print('[OK] (optional)')" 2>/dev/null || { echo "[INFO] not installed (optional)"; }
+
 echo ""
 
 # Architecture-specific notes
@@ -268,7 +307,8 @@ if [ "$ARCH_TYPE" = "arm64" ]; then
     echo ""
     echo "Running on ARM64 architecture (e.g., Raspberry Pi 4/5, Apple Silicon)"
     echo "- All packages should work normally"
-    echo "- Performance may vary based on hardware"
+    echo "- Audio performance is excellent on modern ARM boards"
+    echo "- File transfer up to 10 KB works smoothly"
     echo ""
 elif [ "$ARCH_TYPE" = "arm32" ]; then
     echo "======================================="
@@ -276,9 +316,9 @@ elif [ "$ARCH_TYPE" = "arm32" ]; then
     echo "======================================="
     echo ""
     echo "Running on ARM32 architecture (e.g., Raspberry Pi 3/Zero)"
-    echo "- Some packages may compile slowly"
-    echo "- Audio processing may be slower"
-    echo "- Consider using smaller files"
+    echo "- Some packages may compile during installation"
+    echo "- Audio processing may be slower on older hardware"
+    echo "- Stay within 10 KB file limit for reliable transfer"
     echo ""
 fi
 
@@ -287,8 +327,17 @@ if [ $FAILED -eq 0 ]; then
     echo "  Installation Complete!"
     echo "======================================="
     echo ""
-    echo "To start SonarLink:"
-    echo "  python3 sonarlink.py"
+    echo "To start SonarLink v2.0:"
+    echo "  python3 sonarlink2_0.py"
+    echo ""
+    echo "To create standalone executable:"
+    echo "  pyinstaller --onefile sonarlink2_0.py"
+    echo ""
+    echo "Features:"
+    echo "  - 💬 Open Chat (unencrypted)"
+    echo "  - 🔒 Private Chat (AES-256-GCM + GZIP)"
+    echo "  - 📁 File Transfer (up to 10 KB with encryption)"
+    echo "  - 📊 Audit Log"
     echo ""
     echo "For help, see README.md"
     echo ""
@@ -301,23 +350,26 @@ else
     echo "Please check the error messages above."
     echo ""
     echo "You may need to install missing packages manually:"
-    echo "  pip3 install --user pyaudio ggwave-wheels cryptography numpy"
+    echo "  pip3 install --user -r requirements.txt"
     echo ""
     echo "Or install system packages:"
     case $DISTRO in
         ubuntu|debian|linuxmint|raspbian)
-            echo "  sudo apt-get install python3-pyaudio"
+            echo "  sudo apt-get install python3-pyaudio portaudio19-dev"
             ;;
         arch|manjaro)
-            echo "  sudo pacman -S python-pyaudio"
+            echo "  sudo pacman -S python-pyaudio portaudio"
+            ;;
+        fedora)
+            echo "  sudo dnf install portaudio-devel python3-devel"
             ;;
     esac
     echo ""
 fi
 
-# Make sonarlink.py executable if it exists
-if [ -f "sonarlink.py" ]; then
-    chmod +x sonarlink.py
-    echo "Made sonarlink.py executable"
+# Make sonarlink executable if it exists
+if [ -f "sonarlink2_0.py" ]; then
+    chmod +x sonarlink2_0.py
+    echo "Made sonarlink2_0.py executable"
     echo ""
 fi

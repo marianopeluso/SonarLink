@@ -1,11 +1,6 @@
-# SonarLink v1.0 - Python Requirements
-
-# Audio Processing
-pyaudio>=0.2.13
-ggwave-wheels>=0.4.2
-
-# Cryptography
-cryptography>=41.0.0
-
-# Numerical Processing
-numpy>=1.24.0
+ggwave-wheels==0.4.2.5
+numpy==2.3.5
+cryptography==46.0.3
+colorama==0.4.6
+qrcode==8.2
+PyAudio==0.2.14

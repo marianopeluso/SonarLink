@@ -1,10 +1,15 @@
 #!/bin/bash
-# SonarLink v1.0 - macOS Installation Script
+# SonarLink v2.0 - macOS Installation Script
 # Supports both Intel (x86_64) and Apple Silicon (ARM64) Macs
+# Features: Audio file transfer + chat, AES-256-GCM encryption, audit logs
 
 echo "======================================="
-echo "  SonarLink v1.0 - macOS Installer"
+echo "  SonarLink v2.0 - macOS Installer"
 echo "======================================="
+echo ""
+echo "Features: Audio-based file transfer + messaging"
+echo "Encryption: AES-256-GCM, RSA-4096, FSS1 format"
+echo "Limit: 10 KB files (keys, passwords, credentials)"
 echo ""
 
 # Detect architecture
@@ -75,13 +80,16 @@ echo ""
 # Install system dependencies
 echo "[4/6] Installing system dependencies..."
 
-echo "Installing PortAudio..."
+echo "Installing PortAudio (required for audio input/output)..."
 brew install portaudio
 
 if [ $? -ne 0 ]; then
     echo "[WARNING] Failed to install portaudio"
     echo "Continuing anyway..."
 fi
+
+echo "Installing git (for future updates)..."
+brew install git
 
 echo ""
 
@@ -108,23 +116,23 @@ echo ""
 # Special handling for Apple Silicon
 if [ "$ARCH_TYPE" = "Apple Silicon" ]; then
     echo "[INFO] Apple Silicon detected"
-    echo "[INFO] Some packages may need Rosetta 2 or native compilation"
+    echo "[INFO] Installing native packages (no Rosetta needed)..."
     echo ""
 fi
 
 echo "Installing PyAudio..."
 
-# Try pip first
-python3 -m pip install --user pyaudio
+# Try pip first with best-effort approach
+python3 -m pip install --user pyaudio 2>/dev/null
 
 if [ $? -ne 0 ]; then
-    echo "[WARNING] pip installation failed, trying with portaudio flags..."
+    echo "[INFO] Standard pip installation failed, trying with portaudio flags..."
     
     # Get portaudio paths from Homebrew
     PORTAUDIO_PATH=$(brew --prefix portaudio)
     
     if [ -d "$PORTAUDIO_PATH" ]; then
-        echo "Using portaudio from: $PORTAUDIO_PATH"
+        echo "[INFO] Using portaudio from: $PORTAUDIO_PATH"
         
         # Set compiler flags
         export CFLAGS="-I$PORTAUDIO_PATH/include"
@@ -136,7 +144,7 @@ if [ $? -ne 0 ]; then
         unset CFLAGS
         unset LDFLAGS
     else
-        echo "[ERROR] Could not locate portaudio installation"
+        echo "[WARNING] Could not locate portaudio installation"
         echo ""
         echo "Please try:"
         echo "  brew reinstall portaudio"
@@ -150,16 +158,38 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "Installing ggwave-wheels..."
-python3 -m pip install --user ggwave-wheels
+echo "Installing core dependencies..."
+echo ""
+
+# Install from requirements.txt if it exists
+if [ -f "requirements.txt" ]; then
+    echo "Installing from requirements.txt..."
+    python3 -m pip install --user -r requirements.txt
+else
+    # Fallback: install individually
+    echo "requirements.txt not found, installing individually..."
+    
+    echo "Installing ggwave-wheels..."
+    python3 -m pip install --user ggwave-wheels
+    
+    echo "Installing cryptography..."
+    python3 -m pip install --user cryptography
+    
+    echo "Installing numpy..."
+    python3 -m pip install --user numpy
+    
+    echo "Installing colorama..."
+    python3 -m pip install --user colorama
+    
+    echo "Installing qrcode (optional for Lightning donations)..."
+    python3 -m pip install --user qrcode[pil]
+fi
 
 echo ""
-echo "Installing cryptography..."
-python3 -m pip install --user cryptography
 
-echo ""
-echo "Installing numpy..."
-python3 -m pip install --user numpy
+# Optional: PyInstaller for creating standalone executables
+echo "Installing PyInstaller (optional for creating standalone executables)..."
+python3 -m pip install --user pyinstaller
 
 echo ""
 
@@ -183,6 +213,12 @@ python3 -c "import cryptography; print('[OK]')" 2>/dev/null || { echo "[FAILED]"
 echo -n "Checking numpy... "
 python3 -c "import numpy; print('[OK] Version:', numpy.__version__)" 2>/dev/null || { echo "[FAILED]"; FAILED=1; }
 
+echo -n "Checking colorama... "
+python3 -c "import colorama; print('[OK]')" 2>/dev/null || { echo "[FAILED]"; FAILED=1; }
+
+echo -n "Checking qrcode... "
+python3 -c "import qrcode; print('[OK] (optional)')" 2>/dev/null || { echo "[INFO] not installed (optional)"; }
+
 echo ""
 
 # Architecture-specific notes
@@ -191,10 +227,11 @@ if [ "$ARCH_TYPE" = "Apple Silicon" ]; then
     echo "  Apple Silicon Notes"
     echo "======================================="
     echo ""
-    echo "Running on Apple Silicon (M1/M2/M3)"
-    echo "- All packages should work natively"
+    echo "Running on Apple Silicon (M1/M2/M3/M4)"
+    echo "- All packages installed natively (no Rosetta 2 needed)"
     echo "- Performance is excellent"
     echo "- Audio processing is very fast"
+    echo "- Perfect for high-speed secure transfers"
     echo ""
 elif [ "$ARCH_TYPE" = "Intel" ]; then
     echo "======================================="
@@ -202,8 +239,8 @@ elif [ "$ARCH_TYPE" = "Intel" ]; then
     echo "======================================="
     echo ""
     echo "Running on Intel Mac"
-    echo "- All packages should work normally"
-    echo "- Performance depends on processor"
+    echo "- All packages work natively"
+    echo "- Performance is good on modern Intel processors"
     echo ""
 fi
 
@@ -212,8 +249,17 @@ if [ $FAILED -eq 0 ]; then
     echo "  Installation Complete!"
     echo "======================================="
     echo ""
-    echo "To start SonarLink:"
-    echo "  python3 sonarlink.py"
+    echo "To start SonarLink v2.0:"
+    echo "  python3 sonarlink2_0.py"
+    echo ""
+    echo "To create standalone executable:"
+    echo "  pyinstaller --onefile sonarlink2_0.py"
+    echo ""
+    echo "Features:"
+    echo "  - 💬 Open Chat (unencrypted)"
+    echo "  - 🔒 Private Chat (AES-256-GCM + GZIP)"
+    echo "  - 📁 File Transfer (up to 10 KB with encryption)"
+    echo "  - 📊 Audit Log"
     echo ""
     echo "For help, see README.md"
     echo ""
@@ -228,16 +274,19 @@ else
     echo "Common solutions:"
     echo "1. Reinstall portaudio: brew reinstall portaudio"
     echo "2. Try manual install: pip3 install --user pyaudio"
+    echo "3. Install from requirements.txt: pip3 install --user -r requirements.txt"
     echo ""
 fi
 
-# Make sonarlink.py executable if it exists
-if [ -f "sonarlink.py" ]; then
-    chmod +x sonarlink.py
-    echo "Made sonarlink.py executable"
+# Make sonarlink executable if it exists
+if [ -f "sonarlink2_0.py" ]; then
+    chmod +x sonarlink2_0.py
+    echo "Made sonarlink2_0.py executable"
     echo ""
 fi
 
 echo "Note: On macOS, you may need to grant microphone permissions"
 echo "in System Settings > Privacy & Security > Microphone"
+echo ""
+echo "If you see audio permission errors, grant them in System Settings."
 echo ""

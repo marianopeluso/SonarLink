@@ -1,358 +1,290 @@
-# 🚀 SonarLink - Quick Start Guide
+# SonarLink v2.0 - Quick Start Guide
 
-**Sonarlink - Private file transfer, powered by sound**
-
-Get up and running in 5 minutes!
+Get up and running with SonarLink v2.0 in 5 minutes.
 
 ---
 
-## ⚡ Installation
+## 🚀 Installation (2 minutes)
 
 ### Windows
-
-#### **Step 1: Install Python 3.13**
-
-1. **Download Python**
-   - Go to: **https://www.python.org/downloads/**
-   - Click **"Download Python 3.13.x"**
-
-2. **Run the Installer**
-   - **FIRST SCREEN:** Check ☑ **"Add python.exe to PATH"** (at the bottom)
-   - Click **"Customize installation"** (or "Install Now" if you checked PATH box)
-   
-3. **Optional Features Screen:** (if you chose Customize)
-   - Keep all boxes checked (Documentation, pip, tcl/tk, IDLE, py launcher)
-   - Click **"Next"**
-
-4. **Advanced Options Screen:** (if you chose Customize)
-   - Verify ☑ **"Add Python to environment variables"** is checked
-   - Click **"Install"**
-
-5. **Wait & Complete**
-   - Wait 2-3 minutes for installation
-   - Click **"Close"** when done
-   - **Close all Command Prompt windows**
-   - Open a **NEW** Command Prompt
-
-6. **Verify Installation**
-   ```cmd
-   python --version
-   ```
-   Should show: `Python 3.13.7`
-
-#### **Step 2: Install SonarLink**
-
-```cmd
-# Navigate to SonarLink folder
-cd C:\SonarLink
-
-# Run automated installer
+```batch
 install_windows.bat
 ```
 
-Or install manually:
-```cmd
-pip install pipwin
-pipwin install pyaudio
-pip install ggwave-wheels cryptography numpy
-```
-
-#### **Step 3: Run SonarLink**
-
-```cmd
-python sonarlink.py
-```
-
----
-
 ### Linux
-
 ```bash
-# Run the installer
-chmod +x install_linux.sh
-./install_linux.sh
+bash install_linux.sh
+```
 
-# Or manually:
-sudo apt-get install portaudio19-dev python3-pyaudio  # Ubuntu/Debian
-pip3 install ggwave-wheels cryptography numpy
+### macOS
+```bash
+bash install_macos.sh
+```
+
+**All done?** Run:
+```bash
+python sonarlink2_0.py
 ```
 
 ---
 
-## 🎯 First Transfer (No Encryption)
+## 📋 Main Menu Overview
 
-### Computer A (Sender)
+When you start SonarLink, you'll see:
 
-```bash
-python sonarlink.py
-
-# Menu appears:
-# Choose: 2 (Send files)
-# Choose: 1 (Unencrypted)
-# Enter: test.txt
 ```
+🔊 SonarLink v2.0 - Audio-Based File Transfer 🔊
+================================================
 
-### Computer B (Receiver)
-
-```bash
-python sonarlink.py
-
-# Choose: 3 (Receive)
-# Place microphone near Computer A's speakers
-# File automatically saves!
+[1] 💬 Open Chat          ← Send unencrypted messages
+[2] 📁 Send file          ← Send encrypted files (up to 10 KB)
+[3] 🎧 Receive            ← Listen for messages/files
+[4] 🔓 Decrypt file       ← Decrypt received files
+[5] 📊 View Audit Log     ← See operation history
+[6] ℹ️ Credits             ← About & donations
+[7] ❌ Exit               ← Close application
 ```
 
 ---
 
-## 🔐 Secure Transfer (AES Encryption)
+## 💬 Quick Task: Send a Message
 
-### Both Computers
+### Open Chat (No encryption)
 
-**IMPORTANT:** Agree on password first!  
-Example: `MySecurePass2024!`
+**Sender:**
+1. Press `1` (Open Chat)
+2. Type your message
+3. Speaker icon appears, transmission happens (takes 2-5 seconds)
+4. Message sent via audio waves 🔊
 
-### Sender
+**Receiver:**
+1. Press `3` (Receive messages or files)
+2. Hold phone/device close
+3. Message appears in terminal when received
 
-```bash
-python sonarlink.py
+---
 
-# 2 → 2 (Send → AES)
-# File: document.pdf
-# Password: MySecurePass2024!
-# Send: y
+## 🔒 Quick Task: Send Encrypted Message
+
+### Private Chat (AES-256-GCM + GZIP)
+
+**Step 1: Sender generates token**
+```
+[1] 💬 Open Chat
+→ Private Chat (option at bottom)
+→ System generates 8-digit token
+→ Share token with receiver verbally or via separate channel
 ```
 
-### Receiver
+**Step 2: Receiver enters token**
+```
+[3] 🎧 Receive
+→ Private Chat
+→ Enter the 8-digit token
+→ Ready to receive
+```
 
-```bash
-python sonarlink.py
+**Step 3: Send message**
+- Sender types message
+- Encrypted transmission (smaller, faster than open chat)
+- Receiver sees decrypted message
 
-# 3 (Receive)
-# Receives: document.pdf.aes
+---
 
-# Then decrypt:
-# 4 (Decrypt)
-# File: document.pdf.aes
-# Password: MySecurePass2024!
-# Result: document.pdf_dec.bin
+## 📁 Quick Task: Send a File
+
+### File Transfer (up to 10 KB)
+
+**Perfect for:**
+- SSH keys 🔑
+- GPG keys 🔐
+- Passwords 🛡️
+- Small credentials 📋
+- Short documents 📄
+
+**Sender:**
+1. Press `2` (Send file)
+2. Choose encryption:
+   - `1`: AES-256-GCM (faster, recommended)
+   - `2`: RSA-4096 (slower, maximum security)
+3. Enter password (for AES) or just confirm (for RSA)
+4. Select file to send (drag & drop or type path)
+5. Transmission starts 🔊
+
+**Receiver:**
+1. Press `3` (Receive)
+2. File option → Choose decryption method
+3. Hold device close
+4. File saved to `audio_received/` folder
+
+**Extract encrypted file:**
+1. Press `4` (Decrypt file)
+2. Select file from `audio_received/`
+3. Enter password
+4. Done! File extracted to `audio_send/` (decrypted version)
+
+---
+
+## 📊 Audit Log
+
+Track all operations:
+
+```
+Press [5] → View Audit Log
+```
+
+Shows:
+- Timestamp of each operation
+- File name
+- Encryption method (AES, RSA, plain)
+- Status (SUCCESS, FAILED)
+
+**Privacy note:** Log records metadata only, NOT message content.
+
+---
+
+## 🎯 Common Scenarios
+
+### Scenario 1: Share SSH Key Securely (Air-gapped)
+```
+1. Generate SSH key on secure computer
+2. Use SonarLink to send via audio
+3. Receiver captures on offline device
+4. Transfer via USB/network after air-gap
+```
+
+### Scenario 2: Exchange Passwords in Covert Environment
+```
+1. Sender: Press [1] → Private Chat
+2. System generates token (e.g., 12345678)
+3. Share token verbally or via separate secure channel
+4. Sender types password
+5. Receiver uses token to decrypt
+```
+
+### Scenario 3: Backup Encryption Keys
+```
+1. Export encryption key to file
+2. Press [2] (Send file)
+3. Use RSA-4096 (maximum security)
+4. Send to offline backup device
+5. Audit log tracks backup event
 ```
 
 ---
 
-## 📋 Menu Options
+## ⚡ Performance Tips
+
+### For Faster Transmission
+- Use **AES-256-GCM** (smaller, faster)
+- Keep files under 5 KB when possible
+- Reduce background noise
+- Move devices closer (0.5-1 meter)
+
+### For More Reliable Reception
+- Set system volume to **100%**
+- Use **Private Chat** (GZIP compresses better)
+- Ensure good microphone quality
+- Keep quiet environment
+
+### File Size Limits
+- Open Chat: Depends on message length
+- Private Chat: ~50-60% size reduction via GZIP
+- Files: Up to 10 KB (with encryption metadata)
+- Practical: Keep under 10 KB for reliable transfer
+
+---
+
+## 🔐 Security at a Glance
+
+| Feature | Details |
+|---------|---------|
+| **Open Chat** | No encryption (plaintext audio) |
+| **Private Chat** | AES-256-GCM + GZIP compression |
+| **File Transfer (AES)** | AES-256-GCM + FSS1 format |
+| **File Transfer (RSA)** | RSA-4096 hybrid encryption |
+| **Key Derivation** | PBKDF2 with 600,000 iterations |
+| **Hash Verification** | SHA-256 integrity check |
+| **Tokens** | 8-digit, ephemeral, session-based |
+
+---
+
+## 📁 Folder Structure
+
+SonarLink creates these folders:
 
 ```
-1. Send text messages       → Send short text via audio
-2. Send files              → Send files (encrypted/unencrypted)
-3. Receive                 → Listen for incoming data
-4. Decrypt file            → Decrypt .aes or .rsa files
-5. Exit                    → Close program
+.
+├─ audio_send/          ← Files to send
+├─ audio_received/      ← Files received (encrypted)
+├─ audiologs/           ← Audit log
+│  └─ sonarlink_audit.log
+└─ sonarlink2_0.py      ← Application
 ```
+
+---
+
+## ❓ Troubleshooting
+
+### "No audio detected"
+- Check microphone volume (should be 100%)
+- Check system audio settings
+- Test microphone with voice recorder first
+
+### "File too large"
+- SonarLink supports max 10 KB
+- Compress file before sending
+- For larger files, use network-based tools
+
+### "Message corrupted"
+- Move devices closer
+- Reduce background noise
+- Try again with slower audio (lower quality setting)
+
+### "Decryption failed"
+- Verify password is correct
+- Check file wasn't corrupted during transfer
+- Try receiving again
+
+---
+
+## 🚀 Next Steps
+
+1. **Try Open Chat** - fastest, no setup
+2. **Test File Transfer** - with small test file
+3. **Use Private Chat** - for sensitive data
+4. **Check Audit Log** - verify all operations
 
 ---
 
 ## 💡 Pro Tips
 
-### ✅ DO:
-- Start with small files (< 1 MB)
-- Use quiet environment
-- Keep devices 1-2 meters apart
-- Speaker volume: 70-80%
-- Test with text messages first
-
-### ❌ DON'T:
-- Interrupt during transmission
-- Use in noisy places
-- Place devices too far apart
-- Use very large files initially
-
----
-
-## 🐛 Quick Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| "python is not recognized" | Reinstall Python, CHECK "Add python.exe to PATH" |
-| No audio detected | Increase volume, reduce noise |
-| PyAudio won't install | Use pipwin: `pip install pipwin && pipwin install pyaudio` |
-| Decryption fails | Check password matches exactly |
-| Transfer incomplete | Reduce background noise, retry |
-
----
-
-## ⏱️ Transfer Times
-
-| File Size | Approximate Time |
-|-----------|------------------|
-| 100 KB    | ~15 minutes     |
-| 500 KB    | ~75 minutes     |
-| 1 MB      | ~2.5 hours      |
-| 5 MB      | ~12.5 hours     |
-
-*Based on 120 bytes/second with 1-second delays*
-
----
-
-## 🎬 Complete Example
-
-### Scenario: Send encrypted document
-
-**Preparation:**
-```bash
-# Both computers install SonarLink
-# Both agree on password: "Coffee2024Research!"
-```
-
-**Sender:**
-```bash
-python sonarlink.py
-# 2 → 2
-# File: Q4_report.pdf
-# Password: Coffee2024Research!
-# Send: y
-# *Sound plays from speakers*
-```
-
-**Receiver:**
-```bash
-python sonarlink.py
-# 3
-# *Microphone listens*
-# Receives: Q4_report.pdf.aes
-
-# 4
-# File: Q4_report.pdf.aes
-# Password: Coffee2024Research!
-# Result: Q4_report.pdf_dec.bin
-```
-
-**Done!** Rename `Q4_report.pdf_dec.bin` to `Q4_report.pdf`
-
----
-
-## 📱 Audio Setup
-
-### Sender Device
-1. Check speaker output device is correct
-2. Set volume to 70-80%
-3. Disable audio enhancements
-4. Close other audio apps
-
-### Receiver Device
-1. Check microphone input device
-2. Grant microphone permissions
-3. Disable noise cancellation
-4. Close other apps using microphone
-
----
-
-## 🔑 Password Tips
-
-### Good Passwords:
-- ✅ `MySecure#Pass2024!`
-- ✅ `Coffee_Research_2024`
-- ✅ `Tr@nsfer$ecure123`
-
-### Bad Passwords:
-- ❌ `password`
-- ❌ `12345678`
-- ❌ `coffee`
-
-**Length:** 16-32 characters recommended
-
----
-
-## 🆘 Need Help?
-
-1. **Read full documentation:** `README.md`
-2. **Check troubleshooting section**
-3. **Test with text messages first**
-4. **Verify audio devices work**
-5. **Start with unencrypted small files**
+- **Plausible deniability**: Audio files look innocent, no visible QR codes
+- **Offline capability**: No internet needed, pure sound waves
+- **Cross-room transfer**: Works through doorways, not just face-to-face
+- **Verifiable**: Audit log provides tamper-proof record
 
 ---
 
 ## 📚 Learn More
 
-- **Full documentation:** See `README.md`
-- **Installation help:** See installation scripts
-- **Technical details:** See `README.md` Technical Section
+For detailed information:
+- **Installation**: See `INSTALL.md`
+- **Security Details**: See `SECURITY.md`
+- **Full Features**: See `README.md`
 
 ---
 
-## ✨ Features Summary
+## ⚡ Lightning Support
 
-✅ Audio-based file transfer  
-✅ No network required  
-✅ AES-256 & RSA-2048 encryption  
-✅ Automatic GZIP compression  
-✅ Text message support  
-✅ Multiple file transfers  
-✅ Error detection & recovery  
+Enjoying SonarLink? Support development:
+
+```
+Press [6] (Credits) → View QR Code
+```
+
+Lightning Network donations help maintain the project!
 
 ---
 
----
-
-## ⚠️ Critical Installation Note (Windows)
-
-**The most common mistake:** Forgetting to check the PATH box!
-
-```
-Python Installer - FIRST SCREEN:
-─────────────────────────────────
-         [Install Now]
-         [Customize installation]
-
-☐ Use admin privileges...
-☑ Add python.exe to PATH  ← CHECK THIS BOX!
-   ↑
-CRITICAL!
-```
-
-**Python 3.13 Alternative:**
-If you choose "Customize installation", on the **Advanced Options** screen, verify:
-```
-☑ Add Python to environment variables  ← Must be checked!
-```
-
----
-
-## 🔍 Python 3.13 Users: Visual Installation Guide
-
-```
-STEP 1: First Screen
-────────────────────
-☑ Add python.exe to PATH  ← Check this!
-Click [Install Now] or [Customize installation]
-
-STEP 2a: If you clicked "Customize" - Optional Features
-────────────────────────────────────────────────────────
-☑ Documentation
-☑ pip              ← Keep checked!
-☑ tcl/tk and IDLE
-☑ Python test suite
-☑ py launcher
-Click [Next]
-
-STEP 2b: Advanced Options
-─────────────────────────
-☑ Add Python to environment variables  ← Verify checked!
-Click [Install]
-
-STEP 3: Complete
-────────────────
-Wait for installation → Click [Close]
-Close all Command Prompts → Open NEW one
-Test: python --version
-```
-
----
-
-**That's it! You're ready to use SonarLink!** 🎉
-
-For detailed information, refer to the full `README.md`
-
----
-
-*SonarLink v1.0 - Transform files into sound waves!* 🔊📁
+**Ready to use SonarLink?** Start with `python sonarlink2_0.py` 🔊
