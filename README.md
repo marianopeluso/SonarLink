@@ -6,12 +6,13 @@ Transfer files and messages between computers using sound waves. No network requ
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](https://github.com/marianopeluso/sonarlink)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](https://github.com/marianopeluso/SonarLink)
 
 ---
 
 ## 📋 Table of Contents
 
+- [Breaking Changes Notice](#-breaking-changes-v10--v20)
 - [What Makes SonarLink Unique](#-what-makes-sonarlink-unique)
 - [Features](#-features)
 - [Quick Start](#-quick-start)
@@ -27,7 +28,7 @@ Transfer files and messages between computers using sound waves. No network requ
 
 ---
 
-## ⚠️ Breaking Changes: v1.0 → v2.0 Incompatibility Notice
+## ⚠️ Breaking Changes: v1.0 → v2.0
 
 **SonarLink v2.0 is NOT backward compatible with v1.0.** This is a major security and architecture upgrade.
 
@@ -179,17 +180,17 @@ If you're upgrading from v1.0:
 
 **Windows:**
 ```cmd
-install_windows.bat
+installers\install_windows.bat
 ```
 
 **Linux:**
 ```bash
-bash install_linux.sh
+bash installers/install_linux.sh
 ```
 
 **macOS:**
 ```bash
-bash install_macos.sh
+bash installers/install_macos.sh
 ```
 
 ### First Transfer
@@ -243,10 +244,10 @@ python sonarlink2_0.py
 
 For detailed installation instructions:
 
-- **[QUICKSTART.md](QUICKSTART.md)** - Get running in 5 minutes
-- **[INSTALL.md](INSTALL.md)** - Complete installation for all platforms
-- **[WINDOWS_PYTHON_INSTALLATION_GUIDE.md](WINDOWS_PYTHON_INSTALLATION_GUIDE.md)** - Windows Python setup
-- **[CHANGELOG.md](CHANGELOG.md)** - What's new in v2.0 (with code-verified changes)
+- **[docs/QUICKSTART.md](docs/QUICKSTART.md)** - Get running in 5 minutes
+- **[docs/INSTALL.md](docs/INSTALL.md)** - Complete installation for all platforms
+- **[docs/WINDOWS_PYTHON_INSTALLATION_GUIDE.md](docs/WINDOWS_PYTHON_INSTALLATION_GUIDE.md)** - Windows Python setup
+- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - What's new in v2.0 (with code-verified changes)
 
 ### Manual Installation
 
@@ -513,7 +514,7 @@ Integrity Verification (SHA-256 hash check)
 - ⚠️ **Audio can be recorded** - Use in private spaces for sensitive transfers
 - ⚠️ **Physical security needed** - Protect the environment where transfers occur
 
-For detailed security analysis, see [SECURITY.md](SECURITY.md)
+For detailed security analysis, see [docs/SECURITY.md](docs/SECURITY.md)
 
 ---
 
@@ -542,22 +543,22 @@ For detailed security analysis, see [SECURITY.md](SECURITY.md)
 - Format prevents confusion attacks
 
 ### Full Details
-See [CHANGELOG.md](CHANGELOG.md) for complete code-verified list of changes.
+See [docs/CHANGELOG.md](docs/CHANGELOG.md) for complete code-verified list of changes.
 
 ---
 
 ## 📚 Documentation
 
 ### Quick References
-- **[QUICKSTART.md](QUICKSTART.md)** - 5-minute getting started
-- **[CHANGELOG.md](CHANGELOG.md)** - What's new in v2.0 (code-verified)
+- **[docs/QUICKSTART.md](docs/QUICKSTART.md)** - 5-minute getting started
+- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - What's new in v2.0 (code-verified)
 
 ### Installation & Setup
-- **[INSTALL.md](INSTALL.md)** - Complete installation guide
-- **[WINDOWS_PYTHON_INSTALLATION_GUIDE.md](WINDOWS_PYTHON_INSTALLATION_GUIDE.md)** - Windows Python setup
+- **[docs/INSTALL.md](docs/INSTALL.md)** - Complete installation guide
+- **[docs/WINDOWS_PYTHON_INSTALLATION_GUIDE.md](docs/WINDOWS_PYTHON_INSTALLATION_GUIDE.md)** - Windows Python setup
 
 ### Deep Dives
-- **[SECURITY.md](SECURITY.md)** - Threat model, cryptography details, best practices
+- **[docs/SECURITY.md](docs/SECURITY.md)** - Security policy, threat model, GPG signing
 
 ### Interactive Help
 ```bash
@@ -669,7 +670,7 @@ These are features, not bugs - they're the price of offline, network-free operat
 Ready to transfer securely via sound waves?
 
 1. **Choose your platform** and run the appropriate installer
-2. **Read [QUICKSTART.md](QUICKSTART.md)** (5 minutes)
+2. **Read [docs/QUICKSTART.md](docs/QUICKSTART.md)** (5 minutes)
 3. **Test with Open Chat** (no encryption, fastest)
 4. **Try Private Chat** (with token encryption)
 5. **Send a small test file** (< 5 KB recommended)
@@ -683,4 +684,4 @@ Ready to transfer securely via sound waves?
 
 ---
 
-For detailed technical information, see the comprehensive documentation in this repository.
+For detailed technical information, see the comprehensive documentation in the `docs/` folder.
