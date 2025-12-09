@@ -245,9 +245,9 @@ python sonarlink2_0.py
 For detailed installation instructions:
 
 - **[docs/QUICKSTART.md](docs/QUICKSTART.md)** - Get running in 5 minutes
-- **[docs/INSTALL.md](docs/INSTALL.md)** - Complete installation for all platforms
+- **[docs/INSTALLATION_INSTRUCTION.md](docs/INSTALLATION_INSTRUCTION.md)** - Complete installation for all platforms
 - **[docs/WINDOWS_PYTHON_INSTALLATION_GUIDE.md](docs/WINDOWS_PYTHON_INSTALLATION_GUIDE.md)** - Windows Python setup
-- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - What's new in v2.0 (with code-verified changes)
+- **[CHANGELOG.md](CHANGELOG.md)** - What's new in v2.0 (with code-verified changes)
 
 ### Manual Installation
 
@@ -514,7 +514,7 @@ Integrity Verification (SHA-256 hash check)
 - ⚠️ **Audio can be recorded** - Use in private spaces for sensitive transfers
 - ⚠️ **Physical security needed** - Protect the environment where transfers occur
 
-For detailed security analysis, see [docs/SECURITY.md](docs/SECURITY.md)
+For detailed security analysis, see [docs/SECURITY_DOC.md](docs/SECURITY_DOC.md)
 
 ---
 
@@ -543,7 +543,7 @@ For detailed security analysis, see [docs/SECURITY.md](docs/SECURITY.md)
 - Format prevents confusion attacks
 
 ### Full Details
-See [docs/CHANGELOG.md](docs/CHANGELOG.md) for complete code-verified list of changes.
+See [CHANGELOG.md](CHANGELOG.md) for complete code-verified list of changes.
 
 ---
 
@@ -551,14 +551,14 @@ See [docs/CHANGELOG.md](docs/CHANGELOG.md) for complete code-verified list of ch
 
 ### Quick References
 - **[docs/QUICKSTART.md](docs/QUICKSTART.md)** - 5-minute getting started
-- **[docs/CHANGELOG.md](docs/CHANGELOG.md)** - What's new in v2.0 (code-verified)
+- **[CHANGELOG.md](CHANGELOG.md)** - What's new in v2.0 (code-verified)
 
 ### Installation & Setup
-- **[docs/INSTALL.md](docs/INSTALL.md)** - Complete installation guide
+- **[docs/INSTALLATION_INSTRUCTION.md](docs/INSTALLATION_INSTRUCTION.md)** - Complete installation guide
 - **[docs/WINDOWS_PYTHON_INSTALLATION_GUIDE.md](docs/WINDOWS_PYTHON_INSTALLATION_GUIDE.md)** - Windows Python setup
 
 ### Deep Dives
-- **[docs/SECURITY.md](docs/SECURITY.md)** - Security policy, threat model, GPG signing
+- **[SECURITY.md](SECURITY.md)** - Security policy, threat model, GPG signing
 
 ### Interactive Help
 ```bash
